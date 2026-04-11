@@ -3,7 +3,8 @@ import { useRef, useState } from "react";
 import { Brain, Bot, Eye, Workflow, Building2, AppWindow } from "lucide-react";
 
 const capabilities = [
-  { 
+  {
+    id: "machine-learning",
     icon: Brain, 
     title: "Machine Learning Tasks", 
     description: "Most models guess. Ours understand. We train custom AI architectures on your proprietary data, turning trapped information into an unfair competitive advantage.",
@@ -16,7 +17,8 @@ const capabilities = [
       "Decision Intelligence",
     ]
   },
-  { 
+  {
+    id: "ai-agents",
     icon: Bot, 
     title: "Agents Dev & Maintenance", 
     description: "Don't just automate tasks—automate thinking. We deploy autonomous intelligence that handles complex, multi-step reasoning, learning dynamically from edge cases without human intervention.",
@@ -29,7 +31,8 @@ const capabilities = [
       "Guardrail Engineering",
     ]
   },
-  { 
+  {
+    id: "computer-vision",
     icon: Eye, 
     title: "Computer Vision", 
     description: "Systems that don't just see, but perceive context. From flaw detection in manufacturing to real-time behavioral analysis, we translate pixels into immediate, actionable truth.",
@@ -42,7 +45,8 @@ const capabilities = [
       "Scene Segmentation",
     ]
   },
-  { 
+  {
+    id: "workflow-automation",
     icon: Workflow, 
     title: "Workflow Automations", 
     description: "The end of operational friction. We architect intelligent pipelines that instantly connect your fragmented tools, eliminating human bottlenecks and reducing operating overhead to zero.",
@@ -55,7 +59,8 @@ const capabilities = [
       "SLA Automation",
     ]
   },
-  { 
+  {
+    id: "business-tech",
     icon: Building2, 
     title: "Business Tech Solutions", 
     description: "Technology should conform to your business, not the other way around. We engineer deeply integrated, enterprise-grade platforms precisely calibrated for your industry's unique demands.",
@@ -68,7 +73,8 @@ const capabilities = [
       "Process Re-Engineering",
     ]
   },
-  { 
+  {
+    id: "app-development",
     icon: AppWindow, 
     title: "Application Building", 
     description: "We don't build apps; we engineer digital assets. High-performance, flawlessly secure full-stack ecosystems designed to scale from user one to user one million effortlessly.",
@@ -142,7 +148,7 @@ const CapabilitiesGrid = () => {
           {capabilities.map((cap, i) => {
             const Icon = cap.icon;
             return (
-              <article key={cap.title} className="glass-card bg-white rounded-2xl p-6 border border-slate-200/70">
+              <article key={cap.title} id={`mobile-${cap.id}`} className="glass-card bg-white rounded-2xl p-6 border border-slate-200/70 scroll-mt-24">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-xs font-mono tracking-[0.2em] text-sky-600">0{i + 1}</span>
                   <h3 className="text-3xl font-heading font-bold text-slate-900 tracking-tight">{cap.title}</h3>
@@ -169,6 +175,11 @@ const CapabilitiesGrid = () => {
 
       {/* Desktop: sticky interactive presentation */}
       <section ref={sectionRef} className="hidden lg:block relative h-[600vh]">
+        {/* Invisible anchors mapping to the scroll positions */}
+        {capabilities.map((cap, i) => (
+          <div key={cap.id} id={`desktop-${cap.id}`} className="absolute w-full pointer-events-none" style={{ top: `${i * 100}vh`, height: '100vh' }} />
+        ))}
+        
         <div className="sticky top-0 h-screen flex flex-col justify-center overflow-visible w-full">
           <div className="max-w-7xl mx-auto px-6 sm:px-10 w-full h-full flex flex-col pt-20 lg:pt-24 pb-10 lg:pb-14">
             <div className="mb-10 lg:mb-12">

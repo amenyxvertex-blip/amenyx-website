@@ -5,15 +5,16 @@ import BrandMark from "@/components/BrandMark";
 type FooterLink = {
   label: string;
   href: string;
+  id?: string;
   external?: boolean;
 };
 const footerLinks = {
   Capabilities: [
-    { label: "Machine Learning", href: "#services" },
-    { label: "AI Agents", href: "#services" },
-    { label: "Computer Vision", href: "#services" },
-    { label: "Workflow Automation", href: "#services" },
-    { label: "App Development", href: "#services" },
+    { label: "Machine Learning", href: "#machine-learning", id: "machine-learning" },
+    { label: "AI Agents", href: "#ai-agents", id: "ai-agents" },
+    { label: "Computer Vision", href: "#computer-vision", id: "computer-vision" },
+    { label: "Workflow Automation", href: "#workflow-automation", id: "workflow-automation" },
+    { label: "App Development", href: "#app-development", id: "app-development" },
   ],
   Company: [
     { label: "About", href: "#about" },
@@ -49,6 +50,17 @@ const Footer = () => (
                 <li key={link.label}>
                   <a
                     href={link.href}
+                    onClick={(e) => {
+                      if (link.id) {
+                        e.preventDefault();
+                        const isDesktop = window.innerWidth >= 1024;
+                        const targetId = isDesktop ? `desktop-${link.id}` : `mobile-${link.id}`;
+                        const target = document.getElementById(targetId);
+                        if (target) {
+                          target.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }
+                    }}
                     target={link.external ? "_blank" : undefined}
                     rel={link.external ? "noopener noreferrer" : undefined}
                     className="flex items-center gap-3 text-[13px] text-white/50 hover:text-white transition-all duration-400 group"
