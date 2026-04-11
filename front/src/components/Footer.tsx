@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Instagram } from "lucide-react";
+import { Linkedin, Instagram } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 
 type FooterLink = {
@@ -23,7 +23,6 @@ const footerLinks = {
   ],
   Social: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/amenyx-vertex-a407893bb", external: true },
-    { label: "GitHub", href: "https://github.com/amenyxvertex-blip", external: true },
     { label: "Instagram", href: "https://www.instagram.com/amenyx.vertex/", external: true },
   ],
 } as const satisfies Record<string, FooterLink[]>;
@@ -35,7 +34,7 @@ const Footer = () => (
         {/* Brand */}
         <div>
           <div className="flex items-center mb-5 text-white">
-            <BrandMark size={22} detailed={false} />
+            <BrandMark size={42} detailed={false} />
           </div>
           <p className="text-[13px] text-white/50 leading-[1.7]">
             AI-first software engineering for companies that build the future.
@@ -55,7 +54,6 @@ const Footer = () => (
                     className="flex items-center gap-3 text-[13px] text-white/50 hover:text-white transition-all duration-400 group"
                   >
                     {title === "Social" && link.label === "LinkedIn" && <Linkedin className="w-4 h-4 group-hover:scale-110 group-hover:text-blue-400 transition-all duration-300" />}
-                    {title === "Social" && link.label === "GitHub" && <Github className="w-4 h-4 group-hover:scale-110 group-hover:text-slate-300 transition-all duration-300" />}
                     {title === "Social" && link.label === "Instagram" && <Instagram className="w-4 h-4 group-hover:scale-110 group-hover:text-pink-400 transition-all duration-300" />}
                     {link.label}
                   </a>
