@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Github, Linkedin, Instagram } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 
 type FooterLink = {
@@ -21,9 +22,9 @@ const footerLinks = {
     { label: "Contact", href: "#contact" },
   ],
   Social: [
-    { label: "LinkedIn", href: "https://www.linkedin.com", external: true },
-    { label: "GitHub", href: "https://github.com", external: true },
-    { label: "Twitter", href: "https://twitter.com", external: true },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/amenyx-vertex-a407893bb", external: true },
+    { label: "GitHub", href: "https://github.com/amenyxvertex-blip", external: true },
+    { label: "Instagram", href: "https://www.instagram.com/amenyx.vertex/", external: true },
   ],
 } as const satisfies Record<string, FooterLink[]>;
 
@@ -44,15 +45,18 @@ const Footer = () => (
         {Object.entries(footerLinks).map(([title, links]) => (
           <div key={title}>
             <h4 className="font-heading font-bold text-white text-[13px] mb-5 uppercase tracking-[0.1em]">{title}</h4>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {links.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
                     target={link.external ? "_blank" : undefined}
                     rel={link.external ? "noopener noreferrer" : undefined}
-                    className="text-[13px] text-white/50 hover:text-white transition-colors duration-400"
+                    className="flex items-center gap-3 text-[13px] text-white/50 hover:text-white transition-all duration-400 group"
                   >
+                    {title === "Social" && link.label === "LinkedIn" && <Linkedin className="w-4 h-4 group-hover:scale-110 group-hover:text-blue-400 transition-all duration-300" />}
+                    {title === "Social" && link.label === "GitHub" && <Github className="w-4 h-4 group-hover:scale-110 group-hover:text-slate-300 transition-all duration-300" />}
+                    {title === "Social" && link.label === "Instagram" && <Instagram className="w-4 h-4 group-hover:scale-110 group-hover:text-pink-400 transition-all duration-300" />}
                     {link.label}
                   </a>
                 </li>
