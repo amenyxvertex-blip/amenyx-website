@@ -220,7 +220,7 @@ const Contact = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message">Project details</Label>
+              <Label htmlFor="message">Project details <span className="text-red-500">*</span></Label>
               <Textarea
                 id="message"
                 required

@@ -288,7 +288,7 @@ const CTASection = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message" className="text-slate-100 font-semibold text-sm">Project details</Label>
+              <Label htmlFor="message" className="text-slate-100 font-semibold text-sm">Project details <span className="text-red-500">*</span></Label>
               <Textarea
                 id="message"
                 required
