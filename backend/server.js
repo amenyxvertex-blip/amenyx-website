@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-app.post('/api/contact-email', async (req, res) => {
+const handleContact = async (req, res) => {
   try {
     const { 
       fullName, 
@@ -64,7 +64,10 @@ app.post('/api/contact-email', async (req, res) => {
     console.error("Nodemailer Error:", error);
     res.status(500).json({ success: false, error: 'Unable to send message at this time. Please email us directly.' });
   }
-});
+};
+
+app.post('/api/contact-email', handleContact);
+app.post('/api/contact-whatsapp', handleContact);
 
 app.listen(port, () => {
   console.log(`Backend is running on http://localhost:${port}`);
