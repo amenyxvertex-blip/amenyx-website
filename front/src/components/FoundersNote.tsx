@@ -63,12 +63,12 @@ const FoundersNote = () => {
 
             <div className="space-y-6 sm:space-y-8">
               <ScrollText
-                text="Amenyx Vertex began in a single room with two developers exhausted by the enterprise software industry. We watched companies pour resources into bloated, over-hyped technology that failed to solve their actual shortcomings. We knew AI was the missing link, but only if it was built cleanly-without the complexity masquerading as sophistication."
+                text="Amenyx Vertex began in a single room with two developers who were tired of seeing businesses struggle with over-complicated systems. We watched companies pour resources into bloated technology that looked impressive on paper but failed to solve their actual problems. We realized that AI could change everything—but only if it were built for clarity and direct results, rather than just complexity."
                 className="font-handwritten text-[22px] sm:text-[26px] text-slate-600 leading-[1.6]"
               />
               <div ref={secondParagraphRef}>
                 <ScrollText
-                  text="Our promise is simple: we build software that works the way your business thinks. No unnecessary abstractions, no tech debt time bombs. Just clean, intelligent systems designed by engineers who care about your outcome as much as you do. We're not a vendor - we're your software partner."
+                  text="Our mission is simple: we build intelligence that actually moves the needle for your business. We strip away the noise to deliver high-performance, resilient systems that evolve as you grow. We don't just ship products; we engineer long-term solutions as your dedicated technical partner. Our work is driven by research, but our goal is impact."
                   className="font-handwritten text-[22px] sm:text-[26px] text-slate-600 leading-[1.6]"
                 />
               </div>
