@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const twilio = require('twilio');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -10,10 +10,16 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Initialize Twilio
-const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+// Initialize Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // e.g. amenyxvertex@gmail.com
+    pass: process.env.EMAIL_PASS, // e.g. your 16-character Google App Password
+  },
+});
 
-app.post('/api/contact-whatsapp', async (req, res) => {
+app.post('/api/contact-email', async (req, res) => {
   try {
     const { 
       fullName, 
@@ -27,32 +33,36 @@ app.post('/api/contact-whatsapp', async (req, res) => {
       message 
     } = req.body;
 
-    // Formatting the WhatsApp text professionally
-    const msgBody = `*New Form Submission | Amenyx Vortex* 🚀\n\n` +
-      `*Name:* ${fullName}\n` +
-      `*Email:* ${email}\n` +
-      `*Phone/WA:* ${phone}\n` +
-      `*Company:* ${company || 'N/A'}\n` +
-      `*LinkedIn:* ${linkedinUrl || 'N/A'}\n` +
-      `*Service Required:* ${service}\n` +
-      `*Budget:* ${projectBudget || 'N/A'}\n` +
-      `*Timeline:* ${timeline}\n\n` +
-      `*Project Details:*\n${message}`;
+    const emailHtmlBody = `
+      <h2>New Form Submission | Amenyx Vortex 🚀</h2>
+      <p><strong>Name:</strong> ${fullName}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone/WA:</strong> ${phone}</p>
+      <p><strong>Company:</strong> ${company || 'N/A'}</p>
+      <p><strong>LinkedIn:</strong> ${linkedinUrl || 'N/A'}</p>
+      <p><strong>Service Required:</strong> ${service}</p>
+      <p><strong>Budget:</strong> ${projectBudget || 'N/A'}</p>
+      <p><strong>Timeline:</strong> ${timeline}</p>
+      <p><strong>Project Details:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>
+    `;
 
-    console.log("Sending WhatsApp message...");
+    console.log("Sending email...");
 
-    const twilioResponse = await client.messages.create({
-      body: msgBody,
-      from: `whatsapp:${process.env.TWILIO_WHATSAPP_NUMBER}`,
-      to: `whatsapp:${process.env.MY_WHATSAPP_NUMBER}`
-    });
+    const mailOptions = {
+      from: `Amenyx Vortex Form <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER, // Send email to yourself (amenyxvertex@gmail.com)
+      subject: `New Lead: ${fullName} - ${service}`,
+      html: emailHtmlBody,
+      replyTo: email // So you can hit 'Reply' and it goes to the lead
+    };
 
-    console.log("Success! Message SID:", twilioResponse.sid);
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Success! Message sent:", info.messageId);
     
-    res.status(200).json({ success: true, message: 'Your details were successfully sent privately to WhatsApp.' });
+    res.status(200).json({ success: true, message: 'Your details were successfully sent.' });
   } catch (error) {
-    console.error("Twilio Error:", error);
-    res.status(500).json({ success: false, error: 'Unable to route message through WhatsApp integration at this time.' });
+    console.error("Nodemailer Error:", error);
+    res.status(500).json({ success: false, error: 'Unable to send message at this time. Please email us directly.' });
   }
 });
 

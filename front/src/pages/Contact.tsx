@@ -46,8 +46,8 @@ const Contact = () => {
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL?.trim();
       const endpoint = apiBase
-        ? `${apiBase.replace(/\/$/, "")}/api/contact-whatsapp`
-        : "/api/contact-whatsapp";
+        ? `${apiBase.replace(/\/$/, "")}/api/contact-email`
+        : "/api/contact-email";
 
       const response = await fetch(endpoint, {
         method: "POST",
@@ -64,7 +64,7 @@ const Contact = () => {
 
       setStatus({
         type: "success",
-        message: "Thanks. Your details were sent to our WhatsApp successfully.",
+        message: "Thanks. Your details were sent successfully.",
       });
       setForm(initialForm);
     } catch (error) {
@@ -98,8 +98,7 @@ const Contact = () => {
               Tell us what you are building.
             </h1>
             <p className="mt-5 text-slate-300/80 leading-7 max-w-xl">
-              Submit your project details and we will instantly push the request to our registered WhatsApp using
-              Twilio.
+              Submit your project details and we will instantly get notified and reach back out to you.
             </p>
 
             <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-6 space-y-4">
@@ -237,12 +236,12 @@ const Contact = () => {
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Sending to WhatsApp...
+                  Sending...
                 </>
               ) : (
                 <>
                   <MessageCircle className="w-4 h-4" />
-                  Send inquiry to WhatsApp
+                  Send inquiry
                 </>
               )}
             </Button>
