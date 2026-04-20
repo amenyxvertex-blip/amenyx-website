@@ -75,8 +75,8 @@ const CTASection = () => {
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL?.trim();
       const endpoint = apiBase
-        ? `${apiBase.replace(/\/$/, "")}/api/contact-whatsapp`
-        : "/api/contact-whatsapp";
+        ? `${apiBase.replace(/\/$/, "")}/api/contact-email`
+        : "/api/contact-email";
 
       const response = await fetch(endpoint, {
         method: "POST",
@@ -93,7 +93,7 @@ const CTASection = () => {
 
       setStatus({
         type: "success",
-        message: "Thanks. Your details were sent to our WhatsApp successfully.",
+        message: "Thanks. Your details were sent successfully.",
       });
       setForm(initialForm);
     } catch (error) {
@@ -149,7 +149,7 @@ const CTASection = () => {
                   offset={["start 0.95", "start 0.7"]}
                 />
                 <p className="mt-2 text-white/75 text-[15px] sm:text-[16px] leading-[1.7] max-w-2xl mx-auto">
-                  Submit your project details and we will send them directly to your registered WhatsApp via Twilio.
+                  Submit your project details and we will instantly get notified and reach back out to you.
                 </p>
               </div>
 
@@ -187,12 +187,11 @@ const CTASection = () => {
             <div className="rounded-lg border border-slate-700/70 bg-[#07102A] px-4 py-3">
               <p className="text-slate-200 text-sm font-medium">Professional inquiry channel</p>
               <p className="text-slate-400 text-xs mt-1">Response time: within 1 business day</p>
-              <p className="text-slate-400 text-xs">Best for: AI systems, workflow automation, enterprise software</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-slate-100 font-semibold text-sm">Full name</Label>
+                <Label htmlFor="fullName" className="text-slate-100 font-semibold text-sm">Full name <span className="text-red-500">*</span></Label>
                 <Input
                   id="fullName"
                   required
@@ -202,7 +201,7 @@ const CTASection = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-100 font-semibold text-sm">Work email</Label>
+                <Label htmlFor="email" className="text-slate-100 font-semibold text-sm">Work email <span className="text-red-500">*</span></Label>
                 <Input
                   id="email"
                   type="email"
@@ -266,7 +265,7 @@ const CTASection = () => {
 
             <div className="grid sm:grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="linkedinUrl" className="text-slate-100 font-semibold text-sm">LinkedIn profile</Label>
+                <Label htmlFor="linkedinUrl" className="text-slate-100 font-semibold text-sm">LinkedIn profile <span className="text-red-500">*</span></Label>
                 <Input
                   id="linkedinUrl"
                   required
@@ -277,7 +276,7 @@ const CTASection = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="timeline" className="text-slate-100 font-semibold text-sm">Preferred timeline</Label>
+                <Label htmlFor="timeline" className="text-slate-100 font-semibold text-sm">Preferred timeline <span className="text-red-500">*</span></Label>
                 <Input
                   id="timeline"
                   required
@@ -333,7 +332,7 @@ const CTASection = () => {
                 ) : (
                   <>
                     <MessageCircle className="w-4 h-4" />
-                    Send to WhatsApp
+                    Send inquiry
                   </>
                 )}
               </Button>
