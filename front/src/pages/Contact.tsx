@@ -14,6 +14,7 @@ type ContactFormState = {
   company: string;
   service: string;
   projectBudget: string;
+  linkedinUrl: string;
   timeline: string;
   message: string;
 };
@@ -25,6 +26,7 @@ const initialForm: ContactFormState = {
   company: "",
   service: "AI Agents",
   projectBudget: "",
+  linkedinUrl: "",
   timeline: "",
   message: "",
 };
@@ -107,7 +109,6 @@ const Contact = () => {
                 Email: <a href="mailto:amenyxvertex@gmail.com" className="text-sky-300 hover:text-sky-200">amenyxvertex@gmail.com</a>
               </p>
               <p className="text-sm text-slate-300">Response time: within 1 business day</p>
-              <p className="text-sm text-slate-300">Best for: AI systems, workflow automation, enterprise software</p>
             </div>
           </div>
 
@@ -117,7 +118,7 @@ const Contact = () => {
           >
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="fullName">Full name</Label>
+                <Label htmlFor="fullName">Full name <span className="text-red-500">*</span></Label>
                 <Input
                   id="fullName"
                   required
@@ -128,7 +129,7 @@ const Contact = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Work email</Label>
+                <Label htmlFor="email">Work email <span className="text-red-500">*</span></Label>
                 <Input
                   id="email"
                   type="email"
@@ -193,15 +194,29 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="timeline">Preferred timeline</Label>
-              <Input
-                id="timeline"
-                value={form.timeline}
-                onChange={(e) => updateField("timeline", e.target.value)}
-                className="bg-slate-950/60 border-white/10 text-white placeholder:text-slate-400"
-                placeholder="8-12 weeks"
-              />
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="linkedinUrl">LinkedIn profile <span className="text-red-500">*</span></Label>
+                <Input
+                  id="linkedinUrl"
+                  required
+                  value={form.linkedinUrl}
+                  onChange={(e) => updateField("linkedinUrl", e.target.value)}
+                  className="bg-slate-950/60 border-white/10 text-white placeholder:text-slate-400"
+                  placeholder="https://linkedin.com/in/..."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="timeline">Preferred timeline <span className="text-red-500">*</span></Label>
+                <Input
+                  id="timeline"
+                  required
+                  value={form.timeline}
+                  onChange={(e) => updateField("timeline", e.target.value)}
+                  className="bg-slate-950/60 border-white/10 text-white placeholder:text-slate-400"
+                  placeholder="8-12 weeks"
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
