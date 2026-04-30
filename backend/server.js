@@ -12,7 +12,13 @@ app.use(express.json());
 
 // Initialize Nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
   auth: {
     user: process.env.EMAIL_USER, // e.g. amenyxvertex@gmail.com
     pass: process.env.EMAIL_PASS, // e.g. your 16-character Google App Password
@@ -21,6 +27,13 @@ const transporter = nodemailer.createTransport({
 
 const handleContact = async (req, res) => {
   try {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      return res.status(500).json({
+        success: false,
+        error: 'Mail service is not configured on the server.',
+      });
+    }
+
     const { 
       fullName, 
       email, 
@@ -56,7 +69,12 @@ const handleContact = async (req, res) => {
       replyTo: email // So you can hit 'Reply' and it goes to the lead
     };
 
-    const info = await transporter.sendMail(mailOptions);
+    const info = await Promise.race([
+      transporter.sendMail(mailOptions),
+      new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Mail service timed out. Please try again.')), 15000);
+      }),
+    ]);
     console.log("Success! Message sent:", info.messageId);
     
     res.status(200).json({ success: true, message: 'Your details were successfully sent.' });

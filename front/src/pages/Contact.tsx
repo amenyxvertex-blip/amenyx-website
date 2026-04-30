@@ -48,8 +48,8 @@ const Contact = () => {
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL?.trim();
       const endpoint = apiBase
-        ? `${apiBase.replace(/\/$/, "")}/api/contact-email`
-        : "/api/contact-email";
+        ? `${apiBase.replace(/\/$/, "")}/api/contact-whatsapp`
+        : "/api/contact-whatsapp";
 
       const response = await fetch(endpoint, {
         method: "POST",
@@ -66,7 +66,7 @@ const Contact = () => {
 
       setStatus({
         type: "success",
-        message: "Thanks. Your details were sent successfully.",
+        message: "Thanks. Your details were sent to our team successfully.",
       });
       setForm(initialForm);
     } catch (error) {

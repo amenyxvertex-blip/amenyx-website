@@ -61,7 +61,7 @@ const buildWhatsAppMessage = (payload) => {
   ].join("\n");
 };
 
-app.post("/api/contact-whatsapp", async (req, res) => {
+const handleContact = async (req, res) => {
   try {
     const form = {
       fullName: normalizeText(req.body.fullName),
@@ -101,7 +101,10 @@ app.post("/api/contact-whatsapp", async (req, res) => {
     const message = error instanceof Error ? error.message : "Failed to send WhatsApp message.";
     return res.status(500).json({ error: message });
   }
-});
+};
+
+app.post("/api/contact-whatsapp", handleContact);
+app.post("/api/contact-email", handleContact);
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
