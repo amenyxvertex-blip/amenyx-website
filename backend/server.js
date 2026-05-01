@@ -1,8 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const formData = require('form-data');
-const Mailgun = require('mailgun.js');
+const postmark = require('postmark');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -11,20 +10,18 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-const mailgun = new Mailgun(formData);
-const mailgunClient = process.env.MAILGUN_API_KEY
-  ? mailgun.client({ username: 'api', key: process.env.MAILGUN_API_KEY })
+const postmarkClient = process.env.POSTMARK_SERVER_TOKEN
+  ? new postmark.ServerClient(process.env.POSTMARK_SERVER_TOKEN)
   : null;
 
 const handleContact = async (req, res) => {
   try {
     console.log("[DEBUG] Form submission received");
-    console.log("[DEBUG] MAILGUN_API_KEY:", process.env.MAILGUN_API_KEY ? "SET" : "NOT SET");
-    console.log("[DEBUG] MAILGUN_DOMAIN:", process.env.MAILGUN_DOMAIN ? "SET" : "NOT SET");
-    console.log("[DEBUG] MAILGUN_FROM:", process.env.MAILGUN_FROM ? "SET" : "NOT SET");
+    console.log("[DEBUG] POSTMARK_SERVER_TOKEN:", process.env.POSTMARK_SERVER_TOKEN ? "SET" : "NOT SET");
+    console.log("[DEBUG] POSTMARK_FROM:", process.env.POSTMARK_FROM ? "SET" : "NOT SET");
     
-    if (!mailgunClient || !process.env.MAILGUN_DOMAIN || !process.env.MAILGUN_FROM) {
-      console.error("[ERROR] Mailgun credentials not configured");
+    if (!postmarkClient || !process.env.POSTMARK_FROM) {
+      console.error("[ERROR] Postmark credentials not configured");
       return res.status(500).json({
         success: false,
         error: 'Email service is not configured on the server.',
@@ -59,24 +56,24 @@ const handleContact = async (req, res) => {
     `;
 
     const msg = {
-      from: `Amenyx Vortex Form <${process.env.MAILGUN_FROM}>`,
-      to: process.env.MAILGUN_FROM,
-      subject: `New Lead: ${fullName} - ${service}`,
-      html: emailHtmlBody,
-      'h:Reply-To': email,
+      From: `Amenyx Vortex Form <${process.env.POSTMARK_FROM}>`,
+      To: process.env.POSTMARK_FROM,
+      Subject: `New Lead: ${fullName} - ${service}`,
+      HtmlBody: emailHtmlBody,
+      ReplyTo: email,
     };
 
-    console.log("[DEBUG] Attempting to send email to:", msg.to);
+    console.log("[DEBUG] Attempting to send email to:", msg.To);
 
-    const response = await mailgunClient.messages.create(process.env.MAILGUN_DOMAIN, msg);
+    const response = await postmarkClient.sendEmail(msg);
 
-    console.log("[SUCCESS] Message sent with id:", response?.id);
+    console.log("[SUCCESS] Message sent with id:", response?.MessageID);
     res.status(200).json({ success: true, message: 'Your details were successfully sent.' });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const errorStack = error instanceof Error ? error.stack : '';
     
-    console.error("[ERROR] Mailgun Error - Message:", errorMessage);
+    console.error("[ERROR] Postmark Error - Message:", errorMessage);
     console.error("[ERROR] Error Stack:", errorStack);
     console.error("[ERROR] Full Error Object:", JSON.stringify(error, null, 2));
     
