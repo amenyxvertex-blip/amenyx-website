@@ -65,10 +65,9 @@ const Contact = () => {
       }
 
       setStatus({
-        type: "success",
-        message: "Thanks. Your details were sent to our team successfully.",
+        type: "error",
+        message: "Unable to send message at this time. Please email us directly.",
       });
-      setForm(initialForm);
     } catch (error) {
       setStatus({
         type: "error",
