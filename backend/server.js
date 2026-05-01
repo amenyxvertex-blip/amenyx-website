@@ -60,7 +60,7 @@ const handleContact = async (req, res) => {
     const msg = {
       From: `Amenyx Vortex Form <${process.env.POSTMARK_FROM}>`,
       To: recipient,
-      Subject: `New Lead: ${fullName} - ${service}`,
+      Subject: `New Lead: ${fullName} - ${service} | Amenyx Vertex`,
       HtmlBody: emailHtmlBody,
       ReplyTo: email,
     };
