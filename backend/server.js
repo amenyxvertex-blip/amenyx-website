@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const sgMail = require('@sendgrid/mail');
+const formData = require('form-data');
+const Mailgun = require('mailgun.js');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -10,18 +11,20 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-if (process.env.SENDGRID_API_KEY) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-}
+const mailgun = new Mailgun(formData);
+const mailgunClient = process.env.MAILGUN_API_KEY
+  ? mailgun.client({ username: 'api', key: process.env.MAILGUN_API_KEY })
+  : null;
 
 const handleContact = async (req, res) => {
   try {
     console.log("[DEBUG] Form submission received");
-    console.log("[DEBUG] SENDGRID_API_KEY:", process.env.SENDGRID_API_KEY ? "SET" : "NOT SET");
-    console.log("[DEBUG] SENDGRID_FROM:", process.env.SENDGRID_FROM ? "SET" : "NOT SET");
+    console.log("[DEBUG] MAILGUN_API_KEY:", process.env.MAILGUN_API_KEY ? "SET" : "NOT SET");
+    console.log("[DEBUG] MAILGUN_DOMAIN:", process.env.MAILGUN_DOMAIN ? "SET" : "NOT SET");
+    console.log("[DEBUG] MAILGUN_FROM:", process.env.MAILGUN_FROM ? "SET" : "NOT SET");
     
-    if (!process.env.SENDGRID_API_KEY || !process.env.SENDGRID_FROM) {
-      console.error("[ERROR] SendGrid credentials not configured");
+    if (!mailgunClient || !process.env.MAILGUN_DOMAIN || !process.env.MAILGUN_FROM) {
+      console.error("[ERROR] Mailgun credentials not configured");
       return res.status(500).json({
         success: false,
         error: 'Email service is not configured on the server.',
@@ -56,27 +59,24 @@ const handleContact = async (req, res) => {
     `;
 
     const msg = {
-      from: {
-        email: process.env.SENDGRID_FROM,
-        name: 'Amenyx Vortex Form',
-      },
-      to: process.env.SENDGRID_FROM,
+      from: `Amenyx Vortex Form <${process.env.MAILGUN_FROM}>`,
+      to: process.env.MAILGUN_FROM,
       subject: `New Lead: ${fullName} - ${service}`,
       html: emailHtmlBody,
-      replyTo: email,
+      'h:Reply-To': email,
     };
 
     console.log("[DEBUG] Attempting to send email to:", msg.to);
 
-    const [response] = await sgMail.send(msg);
+    const response = await mailgunClient.messages.create(process.env.MAILGUN_DOMAIN, msg);
 
-    console.log("[SUCCESS] Message sent with status:", response?.statusCode);
+    console.log("[SUCCESS] Message sent with id:", response?.id);
     res.status(200).json({ success: true, message: 'Your details were successfully sent.' });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const errorStack = error instanceof Error ? error.stack : '';
     
-    console.error("[ERROR] SendGrid Error - Message:", errorMessage);
+    console.error("[ERROR] Mailgun Error - Message:", errorMessage);
     console.error("[ERROR] Error Stack:", errorStack);
     console.error("[ERROR] Full Error Object:", JSON.stringify(error, null, 2));
     
