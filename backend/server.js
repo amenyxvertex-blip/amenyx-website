@@ -19,6 +19,7 @@ const handleContact = async (req, res) => {
     console.log("[DEBUG] Form submission received");
     console.log("[DEBUG] POSTMARK_SERVER_TOKEN:", process.env.POSTMARK_SERVER_TOKEN ? "SET" : "NOT SET");
     console.log("[DEBUG] POSTMARK_FROM:", process.env.POSTMARK_FROM ? "SET" : "NOT SET");
+    console.log("[DEBUG] POSTMARK_TO:", process.env.POSTMARK_TO ? "SET" : "NOT SET");
     
     if (!postmarkClient || !process.env.POSTMARK_FROM) {
       console.error("[ERROR] Postmark credentials not configured");
@@ -55,9 +56,10 @@ const handleContact = async (req, res) => {
       <p><strong>Project Details:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>
     `;
 
+    const recipient = process.env.POSTMARK_TO || process.env.POSTMARK_FROM;
     const msg = {
       From: `Amenyx Vortex Form <${process.env.POSTMARK_FROM}>`,
-      To: process.env.POSTMARK_FROM,
+      To: recipient,
       Subject: `New Lead: ${fullName} - ${service}`,
       HtmlBody: emailHtmlBody,
       ReplyTo: email,
