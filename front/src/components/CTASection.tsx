@@ -92,9 +92,10 @@ const CTASection = () => {
       }
 
       setStatus({
-        type: "error",
-        message: "Unable to send message at this time. Please email us directly.",
+        type: "success",
+        message: "Thanks. Your details were sent to WhatsApp successfully.",
       });
+      setForm(initialForm);
     } catch (error) {
       setStatus({
         type: "error",
