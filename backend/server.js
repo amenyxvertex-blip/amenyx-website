@@ -15,6 +15,9 @@ const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true,
+  tls: {
+    family: 4,
+  },
   connectionTimeout: 10000,
   greetingTimeout: 10000,
   socketTimeout: 10000,
@@ -74,7 +77,7 @@ const handleContact = async (req, res) => {
     };
 
     console.log("[DEBUG] Attempting to send email to:", mailOptions.to);
-    console.log("[DEBUG] SMTP Config: host=smtp.gmail.com, port=587, secure=false");
+    console.log("[DEBUG] SMTP Config: host=smtp.gmail.com, port=465, secure=true, family=4");
 
     const info = await Promise.race([
       transporter.sendMail(mailOptions),
