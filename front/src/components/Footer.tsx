@@ -23,7 +23,7 @@ const footerLinks = {
     { label: "Contact", href: "#contact" },
   ],
   Social: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/amenyx-vertex-a407893bb", external: true },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/amenyx-vertex/", external: true },
     { label: "Instagram", href: "https://www.instagram.com/amenyx.vertex/", external: true },
   ],
 } as const satisfies Record<string, FooterLink[]>;
